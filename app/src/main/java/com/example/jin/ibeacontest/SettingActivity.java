@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import static com.example.jin.ibeacontest.FileUtilIp.saveToFile;
-import static com.example.jin.ibeacontest.RecordActivity.IP;
+import static com.example.jin.ibeacontest.MainActivity.IP;
 
 public class SettingActivity extends AppCompatActivity {
 

@@ -45,6 +45,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
+import static com.example.jin.ibeacontest.MainActivity.IP;
 import static com.example.jin.ibeacontest.MainActivity.mBluetoothAdapter;
 import static com.example.jin.ibeacontest.iBeaconClass.CalculateDistance;
 
@@ -383,8 +384,7 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
      * @author fang
      * Data:2017/7/16
      */
-    protected  static  String IP = "192.168.1.107";//服务器IP
-    private static final String URL = "http://"+ IP +":80/post/addPlace";
+    protected static final String URL = "http://"+ IP +":80/post/addPlace";
 
     public void SendDatebase(final Place place) {
 
@@ -393,6 +393,7 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
             public void run() {
                 //执行耗时操作
                 try {
+                    Log.d(TAG, "run: "+URL);
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder()
                             .add("recordData", place.toString())

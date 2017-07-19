@@ -36,13 +36,14 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.example.jin.ibeacontest.FileUtilIp.saveToFile;
-import static com.example.jin.ibeacontest.RecordActivity.IP;
 import static com.example.jin.ibeacontest.iBeaconClass.CalculateDistance;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
     public static BluetoothAdapter mBluetoothAdapter;
+
+    protected  static  String IP = "192.168.1.107";//服务器IP
 
     final String TAG="MainActivity";
 
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         //读取配置文档
         //Toast.makeText(this,FileUtilIp.readFromFile(this),Toast.LENGTH_SHORT).show();
         IP=FileUtilIp.readFromFile(this);
+        //Toast.makeText(this, "IP:"+IP, Toast.LENGTH_SHORT).show();
 
         //打开扫描IBeacon
         Button mScanButton=(Button)findViewById(R.id.button_scan);
@@ -124,6 +126,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IP=FileUtilIp.readFromFile(this);
+    }
 }
 
 
