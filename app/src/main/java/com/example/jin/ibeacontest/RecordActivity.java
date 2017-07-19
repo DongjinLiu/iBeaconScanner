@@ -149,6 +149,7 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
      * @author jin
      * Data:2017/7/18
      */
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public void CloseInputMethodManager(){
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         boolean isOpen=imm.isActive();//isOpen若返回true，则表示输入法打开
@@ -170,8 +171,9 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
         handler.sendEmptyMessage(0);//睡醒来了，传送消息，扫描完成
     }
 
+    //异步消息处理机制
     //定义处理消息的对象
-    private Handler handler = new Handler(){
+    public Handler handler = new Handler(){
         /**
          * 处理消息
          * @param msg
@@ -258,7 +260,7 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
                 public void run() {
                     if(ibeacon != null&&ibeacon.minor!=0) {
                         mIBeaconList.add(ibeacon);
-                        Log.d(TAG, "run: Add iBeacon UUID:"+ibeacon.getProximityUuid());
+                        Log.d(TAG, "run: Add iBeacon UUID:"+ibeacon.getProximityUuid()+"    RSSI: "+ibeacon.getRssi());
                     }
                 }
             });
@@ -309,9 +311,13 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
         //所有扫描到的iBeacon信号的MAC地址都置入该List，扫描到几次就存入几次
         List<String> iBeaconMacList=new ArrayList<>();
 
+        if (mIBeaconList.size()==0){
+            Toast.makeText(RecordActivity.this,"Nothing be scanned!",Toast.LENGTH_SHORT).show();
+        }
+
         //遍历所有接收到的信号信息
         for(iBeacon item:mIBeaconList){
-            Log.d(TAG, "run: item mac:"+item.getBluetoothAddress());
+            //Log.d(TAG, "run: item mac:"+item.getBluetoothAddress());
             //统计iBeacon个数
             if (iBeaconMacList.indexOf(item.getBluetoothAddress())==-1){
                 //首次在该位置接收到某iBeacon信号
@@ -333,24 +339,10 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
         Log.d(TAG, "run: iBeaconsList size="+iBeaconsList.size());
 
         //处理iBeacons类，将处理结果置入answerIBeaconList
-        int averageRssi=0;
         for (iBeacons ibeacons:iBeaconsList){
-            Log.d(TAG, "run: iBeacons MAC"+ibeacons.getBluetoothAddress());
-            for(String string:ibeacons.getRssiList()){
-                Log.d(TAG, "run: iBeacons Rssi"+string);
-                //对接收到某iBeacon在一段时间内在该点的RSSI信号的平均值
-                averageRssi+=Integer.valueOf(string);
-            }
-            //除数为0检查
-            if (ibeacons.getRssiList().size()!=0){
-                //处理完成，置入answerIBeaconList
-                Log.d(TAG, "run: iBeacons RssiList size:"+ibeacons.getRssiList().size());
-                answerIBeaconList.add(new iBeacon(ibeacons,averageRssi/ibeacons.getRssiList().size()));
-            }else {
-                Toast.makeText(RecordActivity.this,"Nothing be scaned.",Toast.LENGTH_SHORT).show();
-            }
-            averageRssi=0;
+            answerIBeaconList.add(new iBeacon(ibeacons,Integer.valueOf(FitRssi.FitRssiData(ibeacons.getRssiList()))));
         }
+
 
         //异步更新UI
         //在后台线程中直接修改适配器是不允许的（ListView不能接受到通知），必须在UI线程中修改适配器
@@ -382,6 +374,7 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
         //Log.d(TAG, "TraversalDatebase: List size is "+answerIBeaconList.size());
         Log.d(TAG, "TraversalDatebase: Place List size is "+place.getIBeaconList().size());
     }
+
 
 
     /**
@@ -432,4 +425,5 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
             }
         }.start();
     }
+
 }
