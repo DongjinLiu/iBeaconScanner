@@ -407,6 +407,11 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
                     if (response.isSuccessful()){
                         handler.sendEmptyMessage(2);//广播上传成功消息
                         //Toast.makeText(RecordActivity.this,"Success!",Toast.LENGTH_SHORT).show();//广播上传成功
+                    }else{
+                        Message msg=new Message();
+                        msg.what=3;
+                        msg.obj="Input Error!Can't save in database!";
+                        handler.sendMessage(msg);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
