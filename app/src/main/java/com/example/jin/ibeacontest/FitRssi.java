@@ -16,7 +16,7 @@ public class FitRssi {
 
         int averageRssi=0;
         for (String string:rssiList){
-            averageRssi+=Integer.valueOf(string);
+            averageRssi+=Integer.valueOf(string);//求平均值
         }
         if (rssiList.size()!=0){
             answer=String.valueOf(averageRssi/rssiList.size());
