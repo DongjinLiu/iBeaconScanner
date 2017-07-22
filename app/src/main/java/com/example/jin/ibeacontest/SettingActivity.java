@@ -42,7 +42,7 @@ public class SettingActivity extends AppCompatActivity {
                 //修改IP
                 IP=mEditTextIp.getText().toString();
                 saveToFile(IP);
-                Toast.makeText(SettingActivity.this,"Save success,new IP is"+IP,Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingActivity.this,"保存设置成功，新IP是："+IP,Toast.LENGTH_SHORT).show();
                 //返回MainActivity
                 Intent intent=new Intent(SettingActivity.this,MainActivity.class);
                 startActivity(intent);
@@ -54,7 +54,7 @@ public class SettingActivity extends AppCompatActivity {
         mButtonCancleSaveSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SettingActivity.this,"Cancle Setting",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingActivity.this,"取消设置",Toast.LENGTH_SHORT).show();
                 //返回MainActivity
                 Intent intent=new Intent(SettingActivity.this,MainActivity.class);
                 startActivity(intent);

@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Save"
+            android:text="保存"
             android:textAllCaps="false"/>
 
         <Button
@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancle"
+            android:text="取消"
             android:textAllCaps="false"/>
     </LinearLayout>
 </LinearLayout>

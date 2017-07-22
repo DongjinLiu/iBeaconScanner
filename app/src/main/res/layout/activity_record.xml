@@ -103,14 +103,14 @@
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="保存"
         android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/button_clear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Clear"
+        android:text="清空"
         android:textAllCaps="false"
         android:visibility="gone"/>
 

@@ -15,7 +15,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,10 +39,13 @@ import static com.example.jin.ibeacontest.MainActivity.mBluetoothAdapter;
 import static com.example.jin.ibeacontest.iBeaconClass.CalculateDistance;
 
 
-public class ScanActivity extends AppCompatActivity {
+public class ScanActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private List<iBeacon> mArrayiBeacon=new ArrayList<>();//iBeacon列表
     final String TAG="ScanActivity";
+
+    SwipeRefreshLayout mSwipeLayout;
+    iBeaconAdapter adapter;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
@@ -52,18 +58,40 @@ public class ScanActivity extends AppCompatActivity {
         //新开一个线程进行扫描，一直扫描知道该Activity的生存周期发生改变
         scanLeDevice(true);
 
-        Button mRefreshButton=(Button)findViewById(R.id.button_refresh);//Refresh Data按钮
-        //刷新数据
-        mRefreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scanLeDevice(false);
-                mArrayiBeacon.clear();
-                Log.d(TAG, "onCreate: Refresh Data!");
-                scanLeDevice(true);
-            }
-        });
+        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.id_swipe_ly);
+        mSwipeLayout.setOnRefreshListener(ScanActivity.this);
+
     }
+
+    public void onRefresh()
+    {
+        // Log.e("xxx", Thread.currentThread().getName());
+        // UI Thread
+
+        handeler.sendEmptyMessage(2);
+
+    }
+
+    protected Handler handeler=new Handler(){
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    Display(mArrayiBeacon);
+                    break;
+                case 2:
+                    scanLeDevice(false);//停止扫描
+                    mArrayiBeacon.clear();//清空列表
+                    //Display(mArrayiBeacon);
+                    adapter.notifyDataSetChanged();
+                    scanLeDevice(true);//重新开始扫描
+                    mSwipeLayout.setRefreshing(false);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     //region 活动生存周期开始/停止扫描
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -165,7 +193,8 @@ public class ScanActivity extends AppCompatActivity {
                         mArrayiBeacon.add(ibeacon);
                         Log.d(TAG, "run: add ibeacon"+mArrayiBeacon.size());
                         Log.d(TAG, "run: iBeacon MAC:"+ibeacon.getBluetoothAddress()+"RSSI:"+ibeacon.getRssi());
-                        Display(mArrayiBeacon);
+                        //Display(mArrayiBeacon);
+                        handeler.sendEmptyMessage(0);
                     }
                 }
             });
@@ -192,12 +221,14 @@ public class ScanActivity extends AppCompatActivity {
                 }
             }
             Log.d(TAG, "Display: iBeacon Count:"+mArrayiBeacon.size());
-
-            //显示
-            iBeaconAdapter adapter=new iBeaconAdapter(ScanActivity.this,R.layout.ibeacon_item,mArrayiBeacon);
-            ListView mListView=(ListView)findViewById(R.id.list_view);
-            mListView.setAdapter(adapter);
         }
+
+        Log.d(TAG, "Display: iBeacon Count:"+mArrayiBeacon.size());
+        //显示
+        adapter=new iBeaconAdapter(ScanActivity.this,R.layout.ibeacon_item,mArrayiBeacon);
+        ListView mListView=(ListView)findViewById(R.id.list_view);
+        mListView.setAdapter(adapter);
+
     }
 
     /**

@@ -8,20 +8,20 @@
         android:id="@+id/button_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scan iBeacon"
+        android:text="扫描iBeacon"
         android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/button_record"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Record Message"
+        android:text="采集指纹"
         android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/button_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Setting"
+        android:text="设置"
         android:textAllCaps="false"/>
 </LinearLayout>
