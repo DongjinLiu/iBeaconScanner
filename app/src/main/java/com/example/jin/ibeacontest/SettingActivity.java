@@ -44,8 +44,6 @@ public class SettingActivity extends AppCompatActivity {
                 saveToFile(IP);
                 Toast.makeText(SettingActivity.this,"保存设置成功，新IP是："+IP,Toast.LENGTH_SHORT).show();
                 //返回MainActivity
-                Intent intent=new Intent(SettingActivity.this,MainActivity.class);
-                startActivity(intent);
                 finish();
             }
         });
@@ -56,11 +54,14 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(SettingActivity.this,"取消设置",Toast.LENGTH_SHORT).show();
                 //返回MainActivity
-                Intent intent=new Intent(SettingActivity.this,MainActivity.class);
-                startActivity(intent);
                 finish();
             }
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Toast.makeText(SettingActivity.this,"取消设置",Toast.LENGTH_SHORT).show();
+    }
 }
