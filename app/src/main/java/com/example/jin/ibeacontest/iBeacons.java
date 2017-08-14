@@ -9,7 +9,7 @@ import java.util.List;
 
 public class iBeacons extends iBeacon {
 
-    List<String> rssiList=new ArrayList<String>();
+   public List<String> rssiList=new ArrayList<String>();
 
     public iBeacons(){
 

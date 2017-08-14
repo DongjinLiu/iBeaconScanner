@@ -331,7 +331,7 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
                     //找到已存在的对象
                     if (item.getBluetoothAddress().equals(iBeaconsList.get(i).getBluetoothAddress())){
                         //向已存在的对象中添加RSSI数据
-                        iBeaconsList.get(i).getRssiList().add(String.valueOf(item.getRssi()));
+                        iBeaconsList.get(i).rssiList.add(String.valueOf(item.getRssi()));
                     }
                 }
             }
