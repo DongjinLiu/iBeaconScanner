@@ -19,31 +19,42 @@ public class FitRssi {
     private static final String TAG="FitRssi";
 
     public static String FitRssiData(List<String> rssiList){
+
+        Log.d(TAG, "FitRssiData: 处理前:"+rssiList);
+
         String answer="1";
 
         List<Integer> fitRssiList=new ArrayList<>();
 
-        double confidence=0.5;
-        double average=0;
-        double variance=0;
-        for (String string:rssiList) {
-            average+=Integer.valueOf(string);
-        }
-        average/=rssiList.size();
-        //System.out.println("average"+average);
-        for (String string:rssiList) {
-            variance+=Math.pow(Integer.valueOf(string)-average, 2);
-        }
-        variance/=rssiList.size();
-        //System.out.println("variance:"+variance);
-        double normal=0;
-        for (String string:rssiList) {
-            normal=(Integer.valueOf(string)-average)/variance;
-            if (normal>-confidence&&normal<confidence) {
-                fitRssiList.add(Integer.valueOf(string));
+        if(rssiList.size()>4){
+            double confidence=0.5;
+            double average=0;
+            double variance=0;
+            for (String string:rssiList) {
+                average+=Integer.valueOf(string);
             }
-            normal=0;
+            average/=rssiList.size();
+            //System.out.println("average"+average);
+            for (String string:rssiList) {
+                variance+=Math.pow(Integer.valueOf(string)-average, 2);
+            }
+            variance/=rssiList.size();
+            //System.out.println("variance:"+variance);
+            double normal=0;
+            for (String string:rssiList) {
+                normal=(Integer.valueOf(string)-average)/variance;
+                if (normal>-confidence&&normal<confidence) {
+                    fitRssiList.add(Integer.valueOf(string));
+                }
+                normal=0;
+            }
+        }else{
+            for(int i=0;i<rssiList.size();i++){
+                fitRssiList.add(Integer.valueOf(rssiList.get(i)));
+            }
         }
+
+
 
         int averageRssi=0;
         for (Integer i:fitRssiList){
@@ -53,7 +64,6 @@ public class FitRssi {
             answer=String.valueOf(averageRssi/fitRssiList.size());
         }
 
-        Log.d(TAG, "FitRssiData: 处理前:"+rssiList);
         Log.d(TAG, "FitRssiData: 处理后:"+fitRssiList);
 
         return answer;

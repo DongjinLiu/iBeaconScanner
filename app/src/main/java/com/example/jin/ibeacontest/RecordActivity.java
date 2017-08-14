@@ -324,7 +324,9 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
                 //首次在该位置接收到某iBeacon信号
                 count++;
                 iBeaconMacList.add(item.getBluetoothAddress());
-                iBeaconsList.add(new iBeacons(item));
+                iBeacons miBeacons=new iBeacons(item);
+                miBeacons.rssiList.add(String.valueOf(item.getRssi()));
+                iBeaconsList.add(miBeacons);
             }else{//非首次在该位置接收到某iBeacon信号
                 //遍历iBeacons类的List
                 for(int i=0;i<iBeaconsList.size();i++){
@@ -339,8 +341,10 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
         Log.d(TAG, "run: count="+count);
         Log.d(TAG, "run: iBeaconsList size="+iBeaconsList.size());
 
+
         //处理iBeacons类，将处理结果置入answerIBeaconList
         for (iBeacons ibeacons:iBeaconsList){
+            Log.d(TAG, "ProcessData: ibeacons:"+ibeacons.getRssiList().size());
             answerIBeaconList.add(new iBeacon(ibeacons,Integer.valueOf(FitRssi.FitRssiData(ibeacons.getRssiList()))));
         }
 
