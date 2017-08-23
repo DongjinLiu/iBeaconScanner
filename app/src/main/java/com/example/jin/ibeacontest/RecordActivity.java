@@ -388,7 +388,7 @@ public class RecordActivity extends AppCompatActivity implements Runnable{
      * @author fang
      * Data:2017/7/16
      */
-    protected static final String URL = "http://"+ IP +":80/post/addPlace";
+    protected static final String URL = "http://"+ IP +":80/addPlace";
 
     public void SendDatebase(final Place place) {
 
